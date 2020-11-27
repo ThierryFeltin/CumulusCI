@@ -11,6 +11,7 @@ from cumulusci.core.utils import import_global
 from cumulusci.robotframework.utils import set_pdb_trace
 from cumulusci.salesforce_api.utils import get_simple_salesforce_connection
 from cumulusci.tasks.robotframework.robotframework import Robot
+from cumulusci.tasks.robotframework.perf_listener import PerfListener
 
 
 class CumulusCI(object):
@@ -40,6 +41,7 @@ class CumulusCI(object):
         self.org_name = org_name
         self._project_config = None
         self._org = None
+        self.ROBOT_LIBRARY_LISTENER = self.perf_listener = PerfListener()
 
         # Turn off info logging of all http requests
         logging.getLogger("requests.packages.urllib3.connectionpool").setLevel(
@@ -241,3 +243,8 @@ class CumulusCI(object):
     def debug(self):
         """Pauses execution and enters the Python debugger."""
         set_pdb_trace()
+
+    def set_test_elapsed_time(self, time_in_seconds):
+        """Analogous to Set Test Message: sets the elapsed time for a test in reports and dashboards"""
+        self.perf_listener.set_elapsed_time(float(time_in_seconds))
+        BuiltIn().set_test_message(f"Elapsed time set by test : {time_in_seconds}")

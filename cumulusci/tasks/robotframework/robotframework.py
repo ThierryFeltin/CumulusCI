@@ -18,6 +18,7 @@ from cumulusci.core.utils import process_list_arg
 from cumulusci.robotframework.utils import set_pdb_trace
 from cumulusci.tasks.salesforce import BaseSalesforceTask
 from cumulusci.tasks.robotframework.debugger import DebugListener
+from cumulusci.tasks.robotframework.perf_listener import patch_robot_elapsed_time
 
 
 class Robot(BaseSalesforceTask):
@@ -186,7 +187,8 @@ class Robot(BaseSalesforceTask):
                 pythonpathsetter.add_path(self.project_config.repo_root)
 
             try:
-                num_failed = robot_run(*self.options["suites"], **options)
+                with patch_robot_elapsed_time():
+                    num_failed = robot_run(*self.options["suites"], **options)
             finally:
                 sys.path = orig_sys_path
 

@@ -38,3 +38,7 @@ Test Run Task Class
 
 Test Run Task Class With Options
     Run Task Class  cumulusci.tasks.salesforce.CreatePackage  package=Test Package
+
+Test Set Elapsed Time
+    [Tags]  perf
+    Set Test Elapsed Time       3.14159
